@@ -10,6 +10,7 @@ import RegistrationScreen from "./screens/RegistrationScreen";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { signout } from "./actions/userActions";
+import ProfileScreen from "./screens/ProfileScreen";
 function App() {
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;
@@ -35,6 +36,9 @@ function App() {
                   <i className="fa fa-caret-down"></i>{" "}
                 </Link>
                 <ul className="dropdown-content" style={{ color: "orange" }}>
+                  <li>
+                    <Link to="/profile">User Profile</Link>
+                  </li>
                   <Link to="#signout" onClick={signoutHandler}>
                     Sign Out
                   </Link>
@@ -48,7 +52,7 @@ function App() {
         <main>
           <Route path="/paragraph/:id" component={ParagraphScreen}></Route>
           <Route path="/" component={HomeScreen} exact></Route>
-
+          <Route path="/profile" component={ProfileScreen}></Route>
           <Route path="/signin" component={LoginScreen}></Route>
           <Route path="/custom/" component={CustomTextScreen}></Route>
           <Route path="/register" component={RegistrationScreen}></Route>
