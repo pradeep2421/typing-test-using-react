@@ -7,6 +7,7 @@ import {
 } from "./reducers/paragraphReducers";
 
 import {
+  userDetailsReducer,
   userRegisterReducer,
   userSigninReducer,
 } from "./reducers/userReducers";
@@ -22,6 +23,7 @@ const reducer = combineReducers({
   paragraphDetails: paragraphDetailsReducer,
   userSignin: userSigninReducer,
   userRegister: userRegisterReducer,
+  userDetails: userDetailsReducer,
 });
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(

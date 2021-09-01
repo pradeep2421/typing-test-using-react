@@ -24,7 +24,7 @@ function LoginScreen(props) {
     dispatch(signin(email, password));
   };
   useEffect(() => {
-    if (userInfo && userInfo.email) {
+    if (userInfo && userInfo.user_id) {
       props.history.push(redirect);
     }
   }, [userInfo]);

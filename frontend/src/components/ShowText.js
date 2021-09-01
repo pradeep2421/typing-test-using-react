@@ -5,7 +5,7 @@ import Speed from "../Speed";
 import Axios from "axios";
 
 import Text from "../Text";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 function ShowText(props) {
   let intervalId = useRef(null);
 
@@ -22,7 +22,7 @@ function ShowText(props) {
   let temp = [];
   for (let i = 0; i < 26; i++) temp[i] = 0;
   const [userinput_alphabets, setUserinput_alphabets] = useState(temp);
-  const [speed_alphabets, setSpeed_alphabets] = useState(temp);
+  const [time_alphabets, setSpeed_alphabets] = useState(temp);
 
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;
@@ -56,14 +56,12 @@ function ShowText(props) {
       if (current_alphabet === -1) return;
 
       let current_speed =
-        previous_time !== seconds
-          ? Math.round(60 / (5 * (seconds - previous_time)))
-          : 100;
-      current_speed = current_speed + speed_alphabets[current_alphabet];
+        previous_time !== seconds ? seconds - previous_time : 0.15;
+      current_speed = current_speed + time_alphabets[current_alphabet];
       setSpeed_alphabets([
-        ...speed_alphabets.slice(0, current_alphabet),
+        ...time_alphabets.slice(0, current_alphabet),
         current_speed,
-        ...speed_alphabets.slice(current_alphabet + 1),
+        ...time_alphabets.slice(current_alphabet + 1),
       ]);
     }
   }
@@ -109,6 +107,13 @@ function ShowText(props) {
     setend(false);
     setstart(false);
     setuserInput("");
+    clearInterval(intervalId.current);
+    setPreviouslength(0);
+    setPreviousTime(-0.15);
+    temp = [];
+    for (let i = 0; i < 26; i++) temp[i] = 0;
+    setSpeed_alphabets(temp);
+    setUserinput_alphabets(temp);
   }
 
   function calculateAccuracy(text, cur) {
@@ -137,11 +142,11 @@ function ShowText(props) {
         Axios.defaults.withCredentials = true;
 
         Axios.post("http://localhost:5000/insertvalue", {
-          email: userInfo.email,
-          speed: average_speed,
-          accuracy: accuracy,
-          speed_alphabets: speed_alphabets,
-          errors_alphabet: temp,
+          user_id: userInfo.user_id,
+          total_alphabets: text.length,
+          total_time: seconds,
+          time_alphabets: time_alphabets,
+          text_alphabets: temp,
           userinput_alphabets: userinput_alphabets,
         }).then((response) => {
           console.log(response);

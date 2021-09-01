@@ -1,80 +1,48 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { detailsUser } from "../actions/userActions";
 import Loading from "../components/Loading";
 
 import MessageBox from "../components/MessageBox";
+import UserDetailsScreen from "./UserDetailsScreen";
 
-export default function ProfileScreen() {
+export default function ProfileScreen(props) {
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;
-  console.log(userInfo);
-  const user = userInfo;
-  const loading = false;
-  const error = false;
+  // const [user_info, setUserInfo] = useState([]);
+  // const [user_speed, setUserSpeed] = useState([]);
+  // const [user_accuracy, setUserAccuracy] = useState([]);
+  // const [user_test, setUserTest] = useState([]);
+  // const [user_time, setUserTime] = useState([]);
+  const redirect = props.location.search
+    ? props.location.search.split("=")[1]
+    : "/";
+
+  const userDetails = useSelector((state) => state.userDetails);
+  const { user, loading, error } = userDetails;
+  console.log(userDetails);
+  console.log(user);
+  console.log(loading);
+  console.log(error);
+  // if (user) {
+  //   setUserInfo(user.info);
+  //   setUserSpeed(user.speeds);
+  //   setUserAccuracy(user.accuracys);
+  //   setUserTest(user.tests);
+  //   setUserTime(user.test_time);
+  // }
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(detailsUser(userInfo._id));
-  }, [dispatch, userInfo._id]);
-  const submitHandler = (e) => {
-    e.preventDefault();
-    // dispatch update profile
-  };
+    if (userInfo) dispatch(detailsUser(userInfo.user_id));
+    else {
+      props.history.push(redirect);
+    }
+  }, [userInfo]);
+
   return (
     <div>
-      <form className="form" onSubmit={submitHandler}>
-        <div>
-          <h1>User Profile</h1>
-        </div>
-        {loading ? (
-          <Loading></Loading>
-        ) : error ? (
-          <MessageBox variant="danger">{error}</MessageBox>
-        ) : (
-          <>
-            <div>
-              <label htmlFor="name">Name</label>
-              <input
-                id="name"
-                type="text"
-                placeholder="Enter name"
-                value={user.name}
-              ></input>
-            </div>
-            <div>
-              <label htmlFor="email">Email</label>
-              <input
-                id="email"
-                type="email"
-                placeholder="Enter email"
-                value={user.email}
-              ></input>
-            </div>
-            <div>
-              <label htmlFor="password">Password</label>
-              <input
-                id="password"
-                type="password"
-                placeholder="Enter password"
-              ></input>
-            </div>
-            <div>
-              <label htmlFor="confirmPassword">confirm Password</label>
-              <input
-                id="confirmPassword"
-                type="password"
-                placeholder="Enter confirm password"
-              ></input>
-            </div>
-            <div>
-              <label />
-              <button className="primary" type="submit">
-                Update
-              </button>
-            </div>
-          </>
-        )}
-      </form>
+      {loading && <Loading></Loading>}
+      {user && <UserDetailsScreen user={user}></UserDetailsScreen>}
     </div>
   );
 }

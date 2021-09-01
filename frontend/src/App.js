@@ -14,6 +14,7 @@ import ProfileScreen from "./screens/ProfileScreen";
 function App() {
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;
+  //console.log(userInfo);
   const dispatch = useDispatch();
   const signoutHandler = () => {
     dispatch(signout());
@@ -32,7 +33,7 @@ function App() {
             {userInfo ? (
               <div className="dropdown">
                 <Link to="#">
-                  {userInfo.email}
+                  {userInfo.userName}
                   <i className="fa fa-caret-down"></i>{" "}
                 </Link>
                 <ul className="dropdown-content" style={{ color: "orange" }}>

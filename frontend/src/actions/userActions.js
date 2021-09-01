@@ -29,30 +29,34 @@ export const signin = (email, password) => async (dispatch) => {
   }
 };
 
-export const register = (email, password) => async (dispatch) => {
-  dispatch({ type: USER_REGISTER_REQUEST, payload: { email, password } });
-  try {
-    const { data } = await Axios.post("/api/users/register", {
-      email,
-      password,
-    });
-    dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
-    dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
-    localStorage.setItem("userInfo", JSON.stringify(data));
-  } catch (error) {
-    dispatch({
-      type: USER_REGISTER_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
-  }
-};
+export const register =
+  (user_name, first_name, last_name, email, password) => async (dispatch) => {
+    dispatch({ type: USER_REGISTER_REQUEST, payload: { email, password } });
+    try {
+      const { data } = await Axios.post("/api/users/register", {
+        user_name,
+        first_name,
+        last_name,
+        email,
+        password,
+      });
+      dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
+      dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
+      localStorage.setItem("userInfo1", JSON.stringify(data));
+    } catch (error) {
+      dispatch({
+        type: USER_REGISTER_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
 
 export const signout = () => (dispatch) => {
   localStorage.removeItem("userInfo");
-
+  localStorage.removeItem("userInfo1");
   dispatch({ type: USER_SIGNOUT });
 };
 // export const detailsParagraph = (paragraphId) => async (dispatch) => {
@@ -72,11 +76,10 @@ export const signout = () => (dispatch) => {
 // };
 export const detailsUser = (userId) => async (dispatch, getState) => {
   dispatch({ type: USER_DETAILS_REQUEST, payload: userId });
-  const {
-    userSignin: { userInfo },
-  } = getState();
   try {
-    const { data } = await Axios.get(`/details`);
+    const { data } = await Axios.post(`/details`, {
+      userId,
+    });
     dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
   } catch (error) {
     const message =
