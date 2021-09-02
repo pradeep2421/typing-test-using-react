@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import OtherUsers from "../components/OtherUsers";
 import UserAccuracy from "../components/UserAccuracy";
 import UserSpeed from "../components/UserSpeed";
 import UserTimes from "../components/UserTimes";
@@ -24,6 +25,7 @@ const UserDetailsScreen = (props) => {
           <UserTyped characterTyped={user.tests}></UserTyped>
           <UserTimes testTimes={user.test_time}></UserTimes>
           <UserAccuracy testAccuracy={user.accuracys}></UserAccuracy>
+          <OtherUsers otherUsers={user.other_users}></OtherUsers>
         </div>
       ) : (
         <div>

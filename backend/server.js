@@ -151,10 +151,12 @@ app.post("/details", (req, res) => {
   console.log(user_id);
   let user_info = [];
   let speeds = [];
+  let highest_speed, lowest_speed, average_speed, average_accuracy;
   let accuracys = [];
   let tests = [];
   let test_time = [];
-
+  let other_users = [];
+  let total_users = 0;
   db.query(
     "SELECT user_id,email,first_name,last_name,user_name FROM user_info WHERE user_id = ?",
     user_id,
@@ -169,6 +171,9 @@ app.post("/details", (req, res) => {
     (err, result) => {
       if (err) res.send({ err: err });
       speeds = result[0];
+      highest_speed = result[0].highest;
+      lowest_speed = result[0].lowest;
+      average_speed = result[0].average;
     }
   );
 
@@ -177,7 +182,7 @@ app.post("/details", (req, res) => {
     user_id,
     (err, result) => {
       if (err) res.send({ err: err });
-
+      average_accuracy = result[0].average;
       accuracys = result[0];
     }
   );
@@ -197,13 +202,74 @@ app.post("/details", (req, res) => {
     (err, result) => {
       if (err) res.send({ err: err });
       tests = result[0];
-      res.send({
-        info: user_info,
-        speeds: speeds,
-        accuracys: accuracys,
-        tests: tests,
-        test_time: test_time,
-      });
+
+      db.query(
+        "SELECT COUNT(*) AS TOTAL_USERS FROM user_speed",
+        (err, result) => {
+          if (err) res.send({ err: err });
+          total_users = result[0].TOTAL_USERS;
+        }
+      );
+
+      db.query(
+        "SELECT COUNT(*) AS MORE_LOWEST FROM user_speed WHERE lowest > ? ",
+        lowest_speed,
+        (err, result) => {
+          if (err) res.send({ err: err });
+          let lower = result[0].MORE_LOWEST;
+          let percentage = Math.round(
+            (100 * (total_users - lower)) / total_users
+          );
+          other_users[0] = percentage;
+        }
+      );
+
+      db.query(
+        "SELECT COUNT(*) AS MORE_AVERAGE FROM user_speed WHERE average > ?",
+        average_speed,
+        (err, result) => {
+          if (err) res.send({ err: err });
+          let aver = result[0].MORE_AVERAGE;
+          let percentage = Math.round(
+            (100 * (total_users - aver)) / total_users
+          );
+          other_users[1] = percentage;
+        }
+      );
+
+      db.query(
+        "SELECT COUNT(*) AS HIGH_MORE FROM user_speed WHERE highest > ? ",
+        highest_speed,
+        (err, result) => {
+          if (err) res.send({ err: err });
+          let highest = result[0].HIGH_MORE;
+          let percentage = Math.round(
+            (100 * (total_users - highest)) / total_users
+          );
+          other_users[2] = percentage;
+        }
+      );
+
+      db.query(
+        "SELECT COUNT(*) AS ACCURACY FROM user_accuracy WHERE average > ? ",
+        average_accuracy,
+        (err, result) => {
+          if (err) res.send({ err: err });
+          let accuracy = result[0].ACCURACY;
+          let percentage = Math.round(
+            (100 * (total_users - accuracy)) / total_users
+          );
+          other_users[3] = percentage;
+          res.send({
+            info: user_info,
+            speeds: speeds,
+            accuracys: accuracys,
+            tests: tests,
+            test_time: test_time,
+            other_users: other_users,
+          });
+        }
+      );
     }
   );
 });

@@ -3,7 +3,7 @@ const data = {
     {
       _id: "1",
       name: "Gandhi quote",
-      para: "I don't find any good quotes I don't find any good quoteI don't find any good quoteI don't find any good quoteI don't find any good quoteI don't find any good quoteI don't find any good quoteI don't find any good quoteI don't find any good quoteI don't find any good quote Be The change that you want see in the world",
+      para: "Be The change that you want see in the world",
       words: "10",
     },
     {

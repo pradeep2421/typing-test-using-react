@@ -55,8 +55,14 @@ function ShowText(props) {
       let current_alphabet = getIndex(current_text[last_index]);
       if (current_alphabet === -1) return;
 
-      let current_speed =
-        previous_time !== seconds ? seconds - previous_time : 0.15;
+      let current_speed = 1;
+      if (previous_time !== seconds) {
+        current_speed = seconds - previous_time;
+        console.log("hellobye");
+      } else {
+        current_speed = 0.15;
+        console.log("byehi");
+      }
       current_speed = current_speed + time_alphabets[current_alphabet];
       setSpeed_alphabets([
         ...time_alphabets.slice(0, current_alphabet),
