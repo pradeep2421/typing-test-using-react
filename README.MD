@@ -6,4 +6,4 @@ This is a Typing Test Application ,which is build to help user to type fast and 
 
 ## TECHNOLOGY USED
 
-I have used ReactJS , CSS ,BOOTSTRAP to build the frontend with REDUX to manage state of the components. NodeJS, EXPRESS for the backend with MYSQL database. Nodemon is used for Nodejs development. JWT Token is used for authentication.
+I have used ReactJS , CSS ,BOOTSTRAP to build the frontend with REDUX to manage state of the components. EXPRESS as a NodeJs framework for the backend with MYSQL database. Nodemon is used for Nodejs development. JWT Token is used for authentication.
